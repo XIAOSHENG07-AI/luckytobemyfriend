@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>生日快乐！</title>
+    <style>
+        body { 
+            margin: 0; 
+            overflow: hidden; 
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            text-align: center;
+        }
+        canvas { 
+            display: block; 
+            margin: 0 auto 20px;
+        }
+        .message {
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            color: #d40055;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <canvas id="heartCanvas" width="400" height="350"></canvas>
+        <div class="message" id="textMessage"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        const textElement = document.getElementById('textMessage');
+
+        // 绘制爱心函数
+        function drawHeart(t) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 爱心参数方程
+            ctx.beginPath();
+            for (let i = 0; i < 360; i++) {
+                const angle = i * Math.PI / 180;
+                const x = 16 * Math.pow(Math.sin(angle), 3);
+                const y = 13 * Math.cos(angle) - 5 * Math.cos(2*angle) - 2 * Math.cos(3*angle) - Math.cos(4*angle);
+                ctx.lineTo(x * 10 + 200, -y * 10 + 150); // 居中
+            }
+            ctx.fillStyle = '#ffb6c1'; // 浅粉色
+            ctx.strokeStyle = '#d40055'; // 深粉色边框
+            ctx.lineWidth = 3;
+            ctx.shadowColor = 'rgba(0,0,0,0.2)';
+            ctx.shadowBlur = 5;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.fill();
+            ctx.stroke();
+
+            // 添加文字
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = '#d40055';
+            ctx.textAlign = 'center';
+            ctx.shadowColor = 'rgba(0,0,0,0)'; // 文字无阴影
+            ctx.fillText('高程程', 200, 180);
+            ctx.font = 'bold 30px Arial';
+            ctx.fillText('生日快乐', 200, 220);
+        }
+
+        // 动画循环
+        function animate() {
+            drawHeart();
+            requestAnimationFrame(animate);
+        }
+
+        // 添加点击交互效果
+        canvas.addEventListener('click', function() {
+            textElement.innerHTML = "🎂 许个愿吧！愿望都会实现哦 🎁";
+            setTimeout(() => {
+                textElement.innerHTML = "点一下爱心！<br>祝你天天开心！";
+            }, 2000);
+        });
+
+        // 启动动画
+        animate();
+    </script>
+</body>
+</html>
